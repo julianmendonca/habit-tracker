@@ -30,7 +30,6 @@ const History = () => {
     { id: 10, name: "Coding", time: new Date() },
   ]);
   const [newHabit, setNewHabit] = useState("");
-
   const addIcon = () => {
     setHabits((prev) => [
       ...prev,
