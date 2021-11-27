@@ -1,0 +1,9 @@
+query GetHabitsByUserIdAndDate($userId: Int!, $date: date!) {
+	habit(where: { user_id: { _eq: $userId }, created_at: { _eq: $date } }) {
+		habit_id
+		created_at
+		name
+		time_created
+		habit_type
+	}
+}

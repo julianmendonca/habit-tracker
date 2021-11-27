@@ -1,0 +1,55 @@
+# Server schema
+schema:
+    - https://habit-tracker.hasura.app/v1/graphql:
+          headers:
+              x-hasura-admin-secret: 3ibf3Klibkv03EMnlzSBYUODRtxjzgzEVJtxJpEnjux2pAB7tNbECTU4c0rZiZEU
+hooks:
+    afterAllFileWrite:
+        - prettier --write
+
+# Local schema
+documents:
+    [
+        "src/graphql/**/queries.gql",
+        "src/graphql/**/mutations.gql",
+        "src/graphql/**/fragments.gql",
+        "src/graphql/**/subscriptions.gql",
+    ]
+overwrite: true
+generates:
+    # Get schemas from server
+    src/graphql/autogenerate/schemas.ts:
+        plugins:
+            - typescript
+
+    # Create operations based on queries
+    src/graphql/autogenerate/operations.ts:
+        preset: import-types
+        presetConfig:
+            typesPath: ./schemas
+        plugins:
+            - typescript-operations
+        config:
+            flattenGeneratedTypes: true
+
+    # Create hooks based on queries
+    src/graphql/autogenerate/hooks.ts:
+        preset: import-types
+        presetConfig:
+            typesPath: ./operations
+        plugins:
+            - typescript-react-apollo
+        config:
+            withHooks: true
+            withHOC: false
+            withComponent: false
+            flattenGeneratedTypes: true
+            withRefetchFn: true
+    src/graphql/autogenerate/schema.graphql:
+        plugins:
+            - schema-ast
+        config:
+            includeDirectives: true
+            flattenGeneratedTypes: true
+
+require: []

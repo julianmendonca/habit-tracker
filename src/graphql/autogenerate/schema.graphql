@@ -1,0 +1,1053 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"whether this query should be cached (Hasura Cloud only)"
+directive @cached(
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+  """measured in seconds"""
+  ttl: Int! = 60
+) on QUERY
+
+"""Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'."""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'."""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+  """does the column match the given POSIX regular expression, case insensitive"""
+  _iregex: String
+  _is_null: Boolean
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+  """does the column NOT match the given POSIX regular expression, case insensitive"""
+  _niregex: String
+  """does the column NOT match the given pattern"""
+  _nlike: String
+  """does the column NOT match the given POSIX regular expression, case sensitive"""
+  _nregex: String
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+  """does the column match the given POSIX regular expression, case sensitive"""
+  _regex: String
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+scalar date
+
+"""Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'."""
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
+}
+
+"""
+columns and relationships of "habit"
+"""
+type habit {
+  created_at: date
+  habit_id: Int!
+  habit_type: habit_type_enum
+  name: String!
+  time_created: timetz!
+  """An object relationship"""
+  user: users
+  user_id: Int!
+}
+
+"""
+aggregated selection of "habit"
+"""
+type habit_aggregate {
+  aggregate: habit_aggregate_fields
+  nodes: [habit!]!
+}
+
+"""
+aggregate fields of "habit"
+"""
+type habit_aggregate_fields {
+  avg: habit_avg_fields
+  count(columns: [habit_select_column!], distinct: Boolean): Int!
+  max: habit_max_fields
+  min: habit_min_fields
+  stddev: habit_stddev_fields
+  stddev_pop: habit_stddev_pop_fields
+  stddev_samp: habit_stddev_samp_fields
+  sum: habit_sum_fields
+  var_pop: habit_var_pop_fields
+  var_samp: habit_var_samp_fields
+  variance: habit_variance_fields
+}
+
+"""aggregate avg on columns"""
+type habit_avg_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""Boolean expression to filter rows from the table "habit". All fields are combined with a logical 'AND'."""
+input habit_bool_exp {
+  _and: [habit_bool_exp!]
+  _not: habit_bool_exp
+  _or: [habit_bool_exp!]
+  created_at: date_comparison_exp
+  habit_id: Int_comparison_exp
+  habit_type: habit_type_enum_comparison_exp
+  name: String_comparison_exp
+  time_created: timetz_comparison_exp
+  user: users_bool_exp
+  user_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "habit"
+"""
+enum habit_constraint {
+  """unique or primary key constraint"""
+  habit_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "habit"
+"""
+input habit_inc_input {
+  habit_id: Int
+  user_id: Int
+}
+
+"""
+input type for inserting data into table "habit"
+"""
+input habit_insert_input {
+  created_at: date
+  habit_id: Int
+  habit_type: habit_type_enum
+  name: String
+  time_created: timetz
+  user: users_obj_rel_insert_input
+  user_id: Int
+}
+
+"""aggregate max on columns"""
+type habit_max_fields {
+  created_at: date
+  habit_id: Int
+  name: String
+  time_created: timetz
+  user_id: Int
+}
+
+"""aggregate min on columns"""
+type habit_min_fields {
+  created_at: date
+  habit_id: Int
+  name: String
+  time_created: timetz
+  user_id: Int
+}
+
+"""
+response of any mutation on the table "habit"
+"""
+type habit_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [habit!]!
+}
+
+"""
+on conflict condition type for table "habit"
+"""
+input habit_on_conflict {
+  constraint: habit_constraint!
+  update_columns: [habit_update_column!]! = []
+  where: habit_bool_exp
+}
+
+"""Ordering options when selecting data from "habit"."""
+input habit_order_by {
+  created_at: order_by
+  habit_id: order_by
+  habit_type: order_by
+  name: order_by
+  time_created: order_by
+  user: users_order_by
+  user_id: order_by
+}
+
+"""primary key columns input for table: habit"""
+input habit_pk_columns_input {
+  habit_id: Int!
+}
+
+"""
+select columns of table "habit"
+"""
+enum habit_select_column {
+  """column name"""
+  created_at
+  """column name"""
+  habit_id
+  """column name"""
+  habit_type
+  """column name"""
+  name
+  """column name"""
+  time_created
+  """column name"""
+  user_id
+}
+
+"""
+input type for updating data in table "habit"
+"""
+input habit_set_input {
+  created_at: date
+  habit_id: Int
+  habit_type: habit_type_enum
+  name: String
+  time_created: timetz
+  user_id: Int
+}
+
+"""aggregate stddev on columns"""
+type habit_stddev_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type habit_stddev_pop_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type habit_stddev_samp_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""aggregate sum on columns"""
+type habit_sum_fields {
+  habit_id: Int
+  user_id: Int
+}
+
+"""
+columns and relationships of "habit_type"
+"""
+type habit_type {
+  name: String!
+}
+
+"""
+aggregated selection of "habit_type"
+"""
+type habit_type_aggregate {
+  aggregate: habit_type_aggregate_fields
+  nodes: [habit_type!]!
+}
+
+"""
+aggregate fields of "habit_type"
+"""
+type habit_type_aggregate_fields {
+  count(columns: [habit_type_select_column!], distinct: Boolean): Int!
+  max: habit_type_max_fields
+  min: habit_type_min_fields
+}
+
+"""Boolean expression to filter rows from the table "habit_type". All fields are combined with a logical 'AND'."""
+input habit_type_bool_exp {
+  _and: [habit_type_bool_exp!]
+  _not: habit_type_bool_exp
+  _or: [habit_type_bool_exp!]
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "habit_type"
+"""
+enum habit_type_constraint {
+  """unique or primary key constraint"""
+  habit_type_pkey
+}
+
+enum habit_type_enum {
+  bad
+  good
+  neutral
+}
+
+"""Boolean expression to compare columns of type "habit_type_enum". All fields are combined with logical 'AND'."""
+input habit_type_enum_comparison_exp {
+  _eq: habit_type_enum
+  _in: [habit_type_enum!]
+  _is_null: Boolean
+  _neq: habit_type_enum
+  _nin: [habit_type_enum!]
+}
+
+"""
+input type for inserting data into table "habit_type"
+"""
+input habit_type_insert_input {
+  name: String
+}
+
+"""aggregate max on columns"""
+type habit_type_max_fields {
+  name: String
+}
+
+"""aggregate min on columns"""
+type habit_type_min_fields {
+  name: String
+}
+
+"""
+response of any mutation on the table "habit_type"
+"""
+type habit_type_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [habit_type!]!
+}
+
+"""
+on conflict condition type for table "habit_type"
+"""
+input habit_type_on_conflict {
+  constraint: habit_type_constraint!
+  update_columns: [habit_type_update_column!]! = []
+  where: habit_type_bool_exp
+}
+
+"""Ordering options when selecting data from "habit_type"."""
+input habit_type_order_by {
+  name: order_by
+}
+
+"""primary key columns input for table: habit_type"""
+input habit_type_pk_columns_input {
+  name: String!
+}
+
+"""
+select columns of table "habit_type"
+"""
+enum habit_type_select_column {
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "habit_type"
+"""
+input habit_type_set_input {
+  name: String
+}
+
+"""
+update columns of table "habit_type"
+"""
+enum habit_type_update_column {
+  """column name"""
+  name
+}
+
+"""
+update columns of table "habit"
+"""
+enum habit_update_column {
+  """column name"""
+  created_at
+  """column name"""
+  habit_id
+  """column name"""
+  habit_type
+  """column name"""
+  name
+  """column name"""
+  time_created
+  """column name"""
+  user_id
+}
+
+"""aggregate var_pop on columns"""
+type habit_var_pop_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""aggregate var_samp on columns"""
+type habit_var_samp_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""aggregate variance on columns"""
+type habit_variance_fields {
+  habit_id: Float
+  user_id: Float
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "habit"
+  """
+  delete_habit(
+    """filter the rows which have to be deleted"""
+    where: habit_bool_exp!
+  ): habit_mutation_response
+  """
+  delete single row from the table: "habit"
+  """
+  delete_habit_by_pk(habit_id: Int!): habit
+  """
+  delete data from the table: "habit_type"
+  """
+  delete_habit_type(
+    """filter the rows which have to be deleted"""
+    where: habit_type_bool_exp!
+  ): habit_type_mutation_response
+  """
+  delete single row from the table: "habit_type"
+  """
+  delete_habit_type_by_pk(name: String!): habit_type
+  """
+  delete data from the table: "users"
+  """
+  delete_users(
+    """filter the rows which have to be deleted"""
+    where: users_bool_exp!
+  ): users_mutation_response
+  """
+  delete single row from the table: "users"
+  """
+  delete_users_by_pk(id: Int!): users
+  """
+  insert data into the table: "habit"
+  """
+  insert_habit(
+    """the rows to be inserted"""
+    objects: [habit_insert_input!]!
+    """on conflict condition"""
+    on_conflict: habit_on_conflict
+  ): habit_mutation_response
+  """
+  insert a single row into the table: "habit"
+  """
+  insert_habit_one(
+    """the row to be inserted"""
+    object: habit_insert_input!
+    """on conflict condition"""
+    on_conflict: habit_on_conflict
+  ): habit
+  """
+  insert data into the table: "habit_type"
+  """
+  insert_habit_type(
+    """the rows to be inserted"""
+    objects: [habit_type_insert_input!]!
+    """on conflict condition"""
+    on_conflict: habit_type_on_conflict
+  ): habit_type_mutation_response
+  """
+  insert a single row into the table: "habit_type"
+  """
+  insert_habit_type_one(
+    """the row to be inserted"""
+    object: habit_type_insert_input!
+    """on conflict condition"""
+    on_conflict: habit_type_on_conflict
+  ): habit_type
+  """
+  insert data into the table: "users"
+  """
+  insert_users(
+    """the rows to be inserted"""
+    objects: [users_insert_input!]!
+    """on conflict condition"""
+    on_conflict: users_on_conflict
+  ): users_mutation_response
+  """
+  insert a single row into the table: "users"
+  """
+  insert_users_one(
+    """the row to be inserted"""
+    object: users_insert_input!
+    """on conflict condition"""
+    on_conflict: users_on_conflict
+  ): users
+  """
+  update data of the table: "habit"
+  """
+  update_habit(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: habit_inc_input
+    """sets the columns of the filtered rows to the given values"""
+    _set: habit_set_input
+    """filter the rows which have to be updated"""
+    where: habit_bool_exp!
+  ): habit_mutation_response
+  """
+  update single row of the table: "habit"
+  """
+  update_habit_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: habit_inc_input
+    """sets the columns of the filtered rows to the given values"""
+    _set: habit_set_input
+    pk_columns: habit_pk_columns_input!
+  ): habit
+  """
+  update data of the table: "habit_type"
+  """
+  update_habit_type(
+    """sets the columns of the filtered rows to the given values"""
+    _set: habit_type_set_input
+    """filter the rows which have to be updated"""
+    where: habit_type_bool_exp!
+  ): habit_type_mutation_response
+  """
+  update single row of the table: "habit_type"
+  """
+  update_habit_type_by_pk(
+    """sets the columns of the filtered rows to the given values"""
+    _set: habit_type_set_input
+    pk_columns: habit_type_pk_columns_input!
+  ): habit_type
+  """
+  update data of the table: "users"
+  """
+  update_users(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: users_inc_input
+    """sets the columns of the filtered rows to the given values"""
+    _set: users_set_input
+    """filter the rows which have to be updated"""
+    where: users_bool_exp!
+  ): users_mutation_response
+  """
+  update single row of the table: "users"
+  """
+  update_users_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: users_inc_input
+    """sets the columns of the filtered rows to the given values"""
+    _set: users_set_input
+    pk_columns: users_pk_columns_input!
+  ): users
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+  """in ascending order, nulls first"""
+  asc_nulls_first
+  """in ascending order, nulls last"""
+  asc_nulls_last
+  """in descending order, nulls first"""
+  desc
+  """in descending order, nulls first"""
+  desc_nulls_first
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "habit"
+  """
+  habit(
+    """distinct select on columns"""
+    distinct_on: [habit_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_order_by!]
+    """filter the rows returned"""
+    where: habit_bool_exp
+  ): [habit!]!
+  """
+  fetch aggregated fields from the table: "habit"
+  """
+  habit_aggregate(
+    """distinct select on columns"""
+    distinct_on: [habit_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_order_by!]
+    """filter the rows returned"""
+    where: habit_bool_exp
+  ): habit_aggregate!
+  """fetch data from the table: "habit" using primary key columns"""
+  habit_by_pk(habit_id: Int!): habit
+  """
+  fetch data from the table: "habit_type"
+  """
+  habit_type(
+    """distinct select on columns"""
+    distinct_on: [habit_type_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_type_order_by!]
+    """filter the rows returned"""
+    where: habit_type_bool_exp
+  ): [habit_type!]!
+  """
+  fetch aggregated fields from the table: "habit_type"
+  """
+  habit_type_aggregate(
+    """distinct select on columns"""
+    distinct_on: [habit_type_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_type_order_by!]
+    """filter the rows returned"""
+    where: habit_type_bool_exp
+  ): habit_type_aggregate!
+  """fetch data from the table: "habit_type" using primary key columns"""
+  habit_type_by_pk(name: String!): habit_type
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): [users!]!
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  users_aggregate(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): users_aggregate!
+  """fetch data from the table: "users" using primary key columns"""
+  users_by_pk(id: Int!): users
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "habit"
+  """
+  habit(
+    """distinct select on columns"""
+    distinct_on: [habit_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_order_by!]
+    """filter the rows returned"""
+    where: habit_bool_exp
+  ): [habit!]!
+  """
+  fetch aggregated fields from the table: "habit"
+  """
+  habit_aggregate(
+    """distinct select on columns"""
+    distinct_on: [habit_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_order_by!]
+    """filter the rows returned"""
+    where: habit_bool_exp
+  ): habit_aggregate!
+  """fetch data from the table: "habit" using primary key columns"""
+  habit_by_pk(habit_id: Int!): habit
+  """
+  fetch data from the table: "habit_type"
+  """
+  habit_type(
+    """distinct select on columns"""
+    distinct_on: [habit_type_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_type_order_by!]
+    """filter the rows returned"""
+    where: habit_type_bool_exp
+  ): [habit_type!]!
+  """
+  fetch aggregated fields from the table: "habit_type"
+  """
+  habit_type_aggregate(
+    """distinct select on columns"""
+    distinct_on: [habit_type_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [habit_type_order_by!]
+    """filter the rows returned"""
+    where: habit_type_bool_exp
+  ): habit_type_aggregate!
+  """fetch data from the table: "habit_type" using primary key columns"""
+  habit_type_by_pk(name: String!): habit_type
+  """
+  fetch data from the table: "users"
+  """
+  users(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): [users!]!
+  """
+  fetch aggregated fields from the table: "users"
+  """
+  users_aggregate(
+    """distinct select on columns"""
+    distinct_on: [users_select_column!]
+    """limit the number of rows returned"""
+    limit: Int
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+    """sort the rows by one or more columns"""
+    order_by: [users_order_by!]
+    """filter the rows returned"""
+    where: users_bool_exp
+  ): users_aggregate!
+  """fetch data from the table: "users" using primary key columns"""
+  users_by_pk(id: Int!): users
+}
+
+scalar timestamptz
+
+"""Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'."""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+scalar timetz
+
+"""Boolean expression to compare columns of type "timetz". All fields are combined with logical 'AND'."""
+input timetz_comparison_exp {
+  _eq: timetz
+  _gt: timetz
+  _gte: timetz
+  _in: [timetz!]
+  _is_null: Boolean
+  _lt: timetz
+  _lte: timetz
+  _neq: timetz
+  _nin: [timetz!]
+}
+
+"""
+columns and relationships of "users"
+"""
+type users {
+  Image_url: String
+  created_at: timestamptz
+  email: String
+  google_id: String!
+  id: Int!
+  name: String
+}
+
+"""
+aggregated selection of "users"
+"""
+type users_aggregate {
+  aggregate: users_aggregate_fields
+  nodes: [users!]!
+}
+
+"""
+aggregate fields of "users"
+"""
+type users_aggregate_fields {
+  avg: users_avg_fields
+  count(columns: [users_select_column!], distinct: Boolean): Int!
+  max: users_max_fields
+  min: users_min_fields
+  stddev: users_stddev_fields
+  stddev_pop: users_stddev_pop_fields
+  stddev_samp: users_stddev_samp_fields
+  sum: users_sum_fields
+  var_pop: users_var_pop_fields
+  var_samp: users_var_samp_fields
+  variance: users_variance_fields
+}
+
+"""aggregate avg on columns"""
+type users_avg_fields {
+  id: Float
+}
+
+"""Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'."""
+input users_bool_exp {
+  Image_url: String_comparison_exp
+  _and: [users_bool_exp!]
+  _not: users_bool_exp
+  _or: [users_bool_exp!]
+  created_at: timestamptz_comparison_exp
+  email: String_comparison_exp
+  google_id: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "users"
+"""
+enum users_constraint {
+  """unique or primary key constraint"""
+  users_google_id_key
+  """unique or primary key constraint"""
+  users_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "users"
+"""
+input users_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "users"
+"""
+input users_insert_input {
+  Image_url: String
+  created_at: timestamptz
+  email: String
+  google_id: String
+  id: Int
+  name: String
+}
+
+"""aggregate max on columns"""
+type users_max_fields {
+  Image_url: String
+  created_at: timestamptz
+  email: String
+  google_id: String
+  id: Int
+  name: String
+}
+
+"""aggregate min on columns"""
+type users_min_fields {
+  Image_url: String
+  created_at: timestamptz
+  email: String
+  google_id: String
+  id: Int
+  name: String
+}
+
+"""
+response of any mutation on the table "users"
+"""
+type users_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+  """data from the rows affected by the mutation"""
+  returning: [users!]!
+}
+
+"""
+input type for inserting object relation for remote table "users"
+"""
+input users_obj_rel_insert_input {
+  data: users_insert_input!
+  """on conflict condition"""
+  on_conflict: users_on_conflict
+}
+
+"""
+on conflict condition type for table "users"
+"""
+input users_on_conflict {
+  constraint: users_constraint!
+  update_columns: [users_update_column!]! = []
+  where: users_bool_exp
+}
+
+"""Ordering options when selecting data from "users"."""
+input users_order_by {
+  Image_url: order_by
+  created_at: order_by
+  email: order_by
+  google_id: order_by
+  id: order_by
+  name: order_by
+}
+
+"""primary key columns input for table: users"""
+input users_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "users"
+"""
+enum users_select_column {
+  """column name"""
+  Image_url
+  """column name"""
+  created_at
+  """column name"""
+  email
+  """column name"""
+  google_id
+  """column name"""
+  id
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "users"
+"""
+input users_set_input {
+  Image_url: String
+  created_at: timestamptz
+  email: String
+  google_id: String
+  id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type users_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type users_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type users_stddev_samp_fields {
+  id: Float
+}
+
+"""aggregate sum on columns"""
+type users_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "users"
+"""
+enum users_update_column {
+  """column name"""
+  Image_url
+  """column name"""
+  created_at
+  """column name"""
+  email
+  """column name"""
+  google_id
+  """column name"""
+  id
+  """column name"""
+  name
+}
+
+"""aggregate var_pop on columns"""
+type users_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type users_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type users_variance_fields {
+  id: Float
+}
