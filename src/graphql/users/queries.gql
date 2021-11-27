@@ -1,0 +1,13 @@
+query GetUserByGoogleId($googleId: String!) {
+	users(where: { google_id: { _eq: $googleId } }) {
+		id
+		name
+		Image_url
+		email
+	}
+}
+query GetUsers {
+	users {
+		id
+	}
+}
