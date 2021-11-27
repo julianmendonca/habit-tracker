@@ -56,9 +56,11 @@ const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
 	return (
 		<EmptyCard width="100%" p={3} mt={3} mb={3} borderRadius={4} onClick={openDeleteDialog}>
 			<Flex alignItems="center" justifyContent="space-between">
-				<Text>{habit.name}</Text>
+				<Text textTransform="capitalize">{habit.name}</Text>
 				<HStack>
-					<Text mr={5}>{getTimeFromTimestamp(habit.time_created)}</Text>
+					<Text mr={5} textTransform="uppercase">
+						{getTimeFromTimestamp(habit.time_created)}
+					</Text>
 					<TypeIcon />
 				</HStack>
 			</Flex>

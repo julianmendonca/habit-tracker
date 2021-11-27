@@ -26,7 +26,8 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 			userId: user?.id || 0,
 			date: date.toISOString(),
 			offset: 0
-		}
+		},
+		fetchPolicy: 'no-cache'
 	})
 	const [deleteHabitMutation] = useDeleteHabitByPkMutation()
 	const insertHabit = (newHabit: string, habitType: Habit_Type_Enum = Habit_Type_Enum.Neutral) => {

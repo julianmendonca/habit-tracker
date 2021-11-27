@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@chakra-ui/layout'
+import { Flex, Grid, GridItem, Heading } from '@chakra-ui/layout'
 import React, { useState } from 'react'
 import CenteredBox from '../../components/cards/CenteredBox'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -50,29 +50,39 @@ const MyHabits = () => {
 				{habitsLoading && <Spinner size="xl" />}
 				{!!habits?.length && <HabitsList habits={habits} onDelete={deleteHabit} />}
 				{!habits?.length && !habitsLoading && <Text>No habits found...</Text>}
-				<Flex alignItems="center" justifyContent="space-between" width="100%" mt={8} mb={8}>
-					<Input
-						placeholder="Basic usage"
-						value={newHabitName}
-						onChange={(e) => setNewHabitName(e.target.value)}
-						size="lg"
-					/>
-					<HabitTypeSelect
-						value={newHabitType}
-						onChange={(e) => setNewHabitType(e.target.value as Habit_Type_Enum)}
-						size="lg"
-						width="40%"
-						mr={2}
-						ml={2}
-					/>
-					<IconButton
-						size="lg"
-						aria-label="Search database"
-						onClick={addIconHandler}
-						icon={<AddIcon />}
-						disabled={!newHabitName}
-					/>
-				</Flex>
+				<Grid width="100%" column={12} gap={4} mt={4} mb={4}>
+					<GridItem colSpan={12}>
+						<Input
+							placeholder="Basic usage"
+							value={newHabitName}
+							onChange={(e) => setNewHabitName(e.target.value)}
+							size="lg"
+							onKeyPress={(e) => {
+								if (e.key === 'Enter') {
+									if (newHabitName) addIconHandler()
+								}
+							}}
+						/>
+					</GridItem>
+					<GridItem colSpan={11}>
+						<HabitTypeSelect
+							value={newHabitType}
+							onChange={(e) => setNewHabitType(e.target.value as Habit_Type_Enum)}
+							size="lg"
+							mr={2}
+						/>
+					</GridItem>
+					<GridItem colSpan={1}>
+						<IconButton
+							size="lg"
+							aria-label="Search database"
+							onClick={addIconHandler}
+							icon={<AddIcon />}
+							disabled={!newHabitName}
+							width="100%"
+						/>
+					</GridItem>
+				</Grid>
 			</Flex>
 		</CenteredBox>
 	)
