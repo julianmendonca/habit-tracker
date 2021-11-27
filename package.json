@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run g && next build",
     "start": "next start",
     "lint": "next lint",
     "g": "graphql-codegen --config codegen.yml"
@@ -25,7 +25,8 @@
     "react": "17.0.2",
     "react-datepicker": "^4.3.0",
     "react-dom": "17.0.2",
-    "react-google-login": "^5.2.2"
+    "react-google-login": "^5.2.2",
+    "ws": "^8.3.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.3.0",

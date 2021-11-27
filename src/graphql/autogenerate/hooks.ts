@@ -55,6 +55,7 @@ export const GetHabitsByUserIdAndDateDocument = gql`
     name
     time_created
     habit_type
+    user_id
   }
 }
     `;

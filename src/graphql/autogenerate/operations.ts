@@ -16,7 +16,7 @@ export type GetHabitsByUserIdAndDateQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetHabitsByUserIdAndDateQuery = { __typename?: 'query_root', habit: Array<{ __typename?: 'habit', habit_id: number, created_at?: any | null | undefined, name: string, time_created: any, habit_type?: Types.Habit_Type_Enum | null | undefined }> };
+export type GetHabitsByUserIdAndDateQuery = { __typename?: 'query_root', habit: Array<{ __typename?: 'habit', habit_id: number, created_at?: any | null | undefined, name: string, time_created: any, habit_type?: Types.Habit_Type_Enum | null | undefined, user_id: number }> };
 
 export type InsertUserMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];
