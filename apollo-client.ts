@@ -7,17 +7,6 @@ import {
 	StoreObject
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { getMainDefinition } from '@apollo/client/utilities'
-import * as ws from 'ws'
-
-const wsLink = new WebSocketLink({
-	uri: 'ws://localhost:4000/subscriptions',
-	options: {
-		reconnect: true
-	},
-	webSocketImpl: ws
-})
 
 const httpLink = createHttpLink({
 	uri: 'https://habit-tracker.hasura.app/v1/graphql'
@@ -34,16 +23,9 @@ const authLink = setContext((_, { headers }) => {
 		}
 	}
 })
-const splitLink = split(
-	({ query }) => {
-		const definition = getMainDefinition(query)
-		return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-	},
-	wsLink,
-	authLink.concat(httpLink)
-)
+
 const client = new ApolloClient({
-	link: splitLink,
+	link: authLink.concat(httpLink),
 	cache: new InMemoryCache({
 		typePolicies: {
 			Query: {
