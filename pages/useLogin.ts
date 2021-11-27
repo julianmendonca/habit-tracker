@@ -5,7 +5,7 @@ import { useAuthContext } from '../src/context/authContext'
 import { useGetUserByGoogleIdLazyQuery, useInsertUserMutation } from '../src/graphql/autogenerate/hooks'
 import { Users } from '../src/graphql/autogenerate/schemas'
 
-const useLogin = () => {
+export const useLogin = () => {
 	const router = useRouter()
 	const [googleResponse, setGoogleResponse] = useState<GoogleLoginResponse | null>(null)
 	const { setUser } = useAuthContext()
@@ -49,5 +49,3 @@ const useLogin = () => {
 
 	return { setGoogleResponse, loginLoading, signupLoading }
 }
-
-export default useLogin

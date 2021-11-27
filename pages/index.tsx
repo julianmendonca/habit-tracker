@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import React from 'react'
 import GoogleLogin, { GoogleLoginResponse } from 'react-google-login'
 import CenteredBox from '../components/cards/CenteredBox'
-import useLogin from './useLogin'
+import { useLogin } from './useLogin'
 
 const Home: NextPage = () => {
 	const { setGoogleResponse, loginLoading, signupLoading } = useLogin()
