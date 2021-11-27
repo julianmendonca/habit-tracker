@@ -1,5 +1,5 @@
-query GetHabitsByUserIdAndDate($userId: Int!, $date: date!) {
-	habit(where: { user_id: { _eq: $userId }, created_at: { _eq: $date } }) {
+query GetHabitsByUserIdAndDate($userId: Int!, $date: date!, $offset: Int) {
+	habit(where: { user_id: { _eq: $userId }, created_at: { _eq: $date } }, offset: $offset) {
 		habit_id
 		created_at
 		name

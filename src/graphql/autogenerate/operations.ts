@@ -3,16 +3,24 @@ import * as Types from './schemas';
 export type InsertHabitMutationVariables = Types.Exact<{
   userId: Types.Scalars['Int'];
   name: Types.Scalars['String'];
-  time?: Types.InputMaybe<Types.Scalars['timestamptz']>;
   habitType: Types.Habit_Type_Enum;
+  time?: Types.InputMaybe<Types.Scalars['timetz']>;
 }>;
 
 
 export type InsertHabitMutation = { __typename?: 'mutation_root', insert_habit_one?: { __typename?: 'habit', habit_id: number, name: string, created_at?: any | null | undefined, habit_type?: Types.Habit_Type_Enum | null | undefined, time_created: any, user_id: number } | null | undefined };
 
+export type DeleteHabitByPkMutationVariables = Types.Exact<{
+  habitId: Types.Scalars['Int'];
+}>;
+
+
+export type DeleteHabitByPkMutation = { __typename?: 'mutation_root', delete_habit_by_pk?: { __typename?: 'habit', habit_id: number } | null | undefined };
+
 export type GetHabitsByUserIdAndDateQueryVariables = Types.Exact<{
   userId: Types.Scalars['Int'];
   date: Types.Scalars['date'];
+  offset?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
 

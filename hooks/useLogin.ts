@@ -15,7 +15,7 @@ export const useLogin = () => {
 	const [signupMutation, { data: signupData, loading: signupLoading, error: signupError }] =
 		useInsertUserMutation()
 
-	const goToHistory = () => router.push('/history')
+	const goToHistory = () => router.push('/my_habits')
 
 	useEffect(() => {
 		if (!googleResponse) return

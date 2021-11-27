@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/layout'
+import { Box, Flex, HStack, Text } from '@chakra-ui/layout'
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -6,37 +6,61 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogOverlay,
-	Button
+	Button,
+	Tooltip
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { Habit } from '../../src/graphql/autogenerate/schemas'
+import { Habit, Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
+import { getTimeFromTimestamp } from '../../src/utils/timeFormat'
 import EmptyCard from './EmptyCard'
+import { CheckCircleIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons'
 
 type HabitCardProps = {
 	habit: Habit
+	onDelete: (habitId: number) => void
 }
 
-const HabitCard = ({ habit }: HabitCardProps) => {
+const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 	const openDeleteDialog = () => setDeleteDialogOpen(true)
 	const closeDeleteDialog = () => setDeleteDialogOpen(false)
 	const cancelRef = React.useRef(null)
 	const handleDelete = () => {
-		alert('Deleted ' + habit.habit_id)
+		onDelete(habit.habit_id)
 		closeDeleteDialog()
+	}
+
+	const TypeIcon = () => {
+		const habitType = habit.habit_type
+		if (habitType === Habit_Type_Enum.Good) {
+			return (
+				<Tooltip label="Good Habit">
+					<CheckCircleIcon color="green.300" />
+				</Tooltip>
+			)
+		} else if (habitType === Habit_Type_Enum.Bad) {
+			return (
+				<Tooltip label="Bad Habit">
+					<WarningIcon color="red.300" />
+				</Tooltip>
+			)
+		} else {
+			return (
+				<Tooltip label="Neutral Habit">
+					<ViewIcon color="blue.200" />
+				</Tooltip>
+			)
+		}
 	}
 
 	return (
 		<EmptyCard width="100%" p={3} mt={3} mb={3} borderRadius={4} onClick={openDeleteDialog}>
 			<Flex alignItems="center" justifyContent="space-between">
 				<Text>{habit.name}</Text>
-				<Text>
-					{habit.time_created.toLocaleString('en-US', {
-						hour: 'numeric',
-						minute: 'numeric',
-						hour12: true
-					})}
-				</Text>
+				<HStack>
+					<Text mr={5}>{getTimeFromTimestamp(habit.time_created)}</Text>
+					<TypeIcon />
+				</HStack>
 			</Flex>
 			<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelRef} onClose={closeDeleteDialog}>
 				<AlertDialogOverlay>
@@ -49,7 +73,7 @@ const HabitCard = ({ habit }: HabitCardProps) => {
 
 						<AlertDialogFooter>
 							<Button onClick={closeDeleteDialog}>Cancel</Button>
-							<Button colorScheme="red" onClick={handleDelete} ml={3}>
+							<Button colorScheme="red" onClick={handleDelete} ml={3} disabled={habit.habit_id < 0}>
 								Delete
 							</Button>
 						</AlertDialogFooter>

@@ -1,10 +1,16 @@
-mutation InsertHabit($userId: Int!, $name: String!, $time: timestamptz, $habitType: habit_type_enum!) {
-	insert_habit_one(object: { user_id: $userId, name: $name, habit_type: $habitType }) {
+mutation InsertHabit($userId: Int!, $name: String!, $habitType: habit_type_enum!, $time: timetz) {
+	insert_habit_one(object: { user_id: $userId, name: $name, habit_type: $habitType, time_created: $time }) {
 		habit_id
 		name
 		created_at
 		habit_type
 		time_created
 		user_id
+	}
+}
+
+mutation DeleteHabitByPK($habitId: Int!) {
+	delete_habit_by_pk(habit_id: $habitId) {
+		habit_id
 	}
 }

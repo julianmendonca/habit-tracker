@@ -5,9 +5,9 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 
 export const InsertHabitDocument = gql`
-    mutation InsertHabit($userId: Int!, $name: String!, $time: timestamptz, $habitType: habit_type_enum!) {
+    mutation InsertHabit($userId: Int!, $name: String!, $habitType: habit_type_enum!, $time: timetz) {
   insert_habit_one(
-    object: {user_id: $userId, name: $name, habit_type: $habitType}
+    object: {user_id: $userId, name: $name, habit_type: $habitType, time_created: $time}
   ) {
     habit_id
     name
@@ -35,8 +35,8 @@ export type InsertHabitMutationFn = Apollo.MutationFunction<Types.InsertHabitMut
  *   variables: {
  *      userId: // value for 'userId'
  *      name: // value for 'name'
- *      time: // value for 'time'
  *      habitType: // value for 'habitType'
+ *      time: // value for 'time'
  *   },
  * });
  */
@@ -47,9 +47,45 @@ export function useInsertHabitMutation(baseOptions?: Apollo.MutationHookOptions<
 export type InsertHabitMutationHookResult = ReturnType<typeof useInsertHabitMutation>;
 export type InsertHabitMutationResult = Apollo.MutationResult<Types.InsertHabitMutation>;
 export type InsertHabitMutationOptions = Apollo.BaseMutationOptions<Types.InsertHabitMutation, Types.InsertHabitMutationVariables>;
+export const DeleteHabitByPkDocument = gql`
+    mutation DeleteHabitByPK($habitId: Int!) {
+  delete_habit_by_pk(habit_id: $habitId) {
+    habit_id
+  }
+}
+    `;
+export type DeleteHabitByPkMutationFn = Apollo.MutationFunction<Types.DeleteHabitByPkMutation, Types.DeleteHabitByPkMutationVariables>;
+
+/**
+ * __useDeleteHabitByPkMutation__
+ *
+ * To run a mutation, you first call `useDeleteHabitByPkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHabitByPkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHabitByPkMutation, { data, loading, error }] = useDeleteHabitByPkMutation({
+ *   variables: {
+ *      habitId: // value for 'habitId'
+ *   },
+ * });
+ */
+export function useDeleteHabitByPkMutation(baseOptions?: Apollo.MutationHookOptions<Types.DeleteHabitByPkMutation, Types.DeleteHabitByPkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.DeleteHabitByPkMutation, Types.DeleteHabitByPkMutationVariables>(DeleteHabitByPkDocument, options);
+      }
+export type DeleteHabitByPkMutationHookResult = ReturnType<typeof useDeleteHabitByPkMutation>;
+export type DeleteHabitByPkMutationResult = Apollo.MutationResult<Types.DeleteHabitByPkMutation>;
+export type DeleteHabitByPkMutationOptions = Apollo.BaseMutationOptions<Types.DeleteHabitByPkMutation, Types.DeleteHabitByPkMutationVariables>;
 export const GetHabitsByUserIdAndDateDocument = gql`
-    query GetHabitsByUserIdAndDate($userId: Int!, $date: date!) {
-  habit(where: {user_id: {_eq: $userId}, created_at: {_eq: $date}}) {
+    query GetHabitsByUserIdAndDate($userId: Int!, $date: date!, $offset: Int) {
+  habit(
+    where: {user_id: {_eq: $userId}, created_at: {_eq: $date}}
+    offset: $offset
+  ) {
     habit_id
     created_at
     name
@@ -74,6 +110,7 @@ export const GetHabitsByUserIdAndDateDocument = gql`
  *   variables: {
  *      userId: // value for 'userId'
  *      date: // value for 'date'
+ *      offset: // value for 'offset'
  *   },
  * });
  */

@@ -7,44 +7,31 @@ import { AddIcon } from '@chakra-ui/icons'
 import { Input, Spinner } from '@chakra-ui/react'
 import DateSelector from '../../components/DateSelector'
 import HabitsList from '../../components/lists/HabitsList'
+import { Text } from '@chakra-ui/react'
 import {
+	useDeleteHabitByPkMutation,
 	useGetHabitsByUserIdAndDateQuery,
-	useGetUsersQuery,
 	useInsertHabitMutation
 } from '../../src/graphql/autogenerate/hooks'
 import { Habit, Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
 import { useAuthContext } from '../../src/context/authContext'
+import { useEffect } from 'react'
+import { currentDate, getCurrentTime, getCurrentTimez } from '../../src/utils/timeFormat'
+import { useHabits } from '../../hooks/useHabits'
+import { HabitTypeSelect } from '../../components/selects/HabitTypeSelect'
 
-const History = () => {
+const MyHabits = () => {
 	const { user } = useAuthContext()
 	const [date, setDate] = useState(new Date())
-	const [habits, setHabits] = useState<Habit[]>([])
-	const [newHabit, setNewHabit] = useState('')
+	const [newHabitName, setNewHabitName] = useState('')
+	const [newHabitType, setNewHabitType] = useState(Habit_Type_Enum.Neutral)
 
-	const [insertHabitMutation, { data: insertHabitData, loading: insertDataLoading }] = useInsertHabitMutation()
-	const { data: habitsData, loading: habitsLoading } = useGetHabitsByUserIdAndDateQuery({
-		variables: {
-			userId: user?.id || 0,
-			date: date.toISOString()
-		}
-	})
-	const addIcon = () => {
-		setNewHabit('')
-		if (user?.id) {
-			insertHabitMutation({
-				variables: {
-					name: newHabit.toLowerCase(),
-					userId: user.id,
-					habitType: Habit_Type_Enum.Neutral
-				},
-				update: (cache, { data }) => {
-					cache.evict({ id: `habit:${data?.insert_habit_one?.habit_id}` })
-				}
-			})
-		}
+	const { insertHabit, deleteHabit, habitsLoading, habits } = useHabits({ user, date })
+
+	const addIconHandler = () => {
+		setNewHabitName('')
+		insertHabit(newHabitName, newHabitType)
 	}
-
-	const { data } = useGetUsersQuery()
 
 	return (
 		<CenteredBox>
@@ -61,20 +48,34 @@ const History = () => {
 			</Flex>
 			<Flex direction="column" alignItems="center">
 				{habitsLoading && <Spinner size="xl" />}
-				{habitsData?.habit?.length && <HabitsList habits={habitsData.habit} />}
+				{!!habits?.length && <HabitsList habits={habits} onDelete={deleteHabit} />}
+				{!habits?.length && !habitsLoading && <Text>No habits found...</Text>}
 				<Flex alignItems="center" justifyContent="space-between" width="100%" mt={8} mb={8}>
 					<Input
 						placeholder="Basic usage"
-						mr={2}
-						value={newHabit}
-						onChange={(e) => setNewHabit(e.target.value)}
+						value={newHabitName}
+						onChange={(e) => setNewHabitName(e.target.value)}
 						size="lg"
 					/>
-					<IconButton size="lg" aria-label="Search database" onClick={addIcon} icon={<AddIcon />} />
+					<HabitTypeSelect
+						value={newHabitType}
+						onChange={(e) => setNewHabitType(e.target.value as Habit_Type_Enum)}
+						size="lg"
+						width="40%"
+						mr={2}
+						ml={2}
+					/>
+					<IconButton
+						size="lg"
+						aria-label="Search database"
+						onClick={addIconHandler}
+						icon={<AddIcon />}
+						disabled={!newHabitName}
+					/>
 				</Flex>
 			</Flex>
 		</CenteredBox>
 	)
 }
 
-export default History
+export default MyHabits

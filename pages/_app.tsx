@@ -9,6 +9,7 @@ import { ApolloProvider } from '@apollo/client'
 import { AuthProvider, useAuthContext } from '../src/context/authContext'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { NavBar } from '../components/nav/NavBar'
 
 const MyAppContent = ({ Component, pageProps }: AppProps) => {
 	const { user } = useAuthContext()
@@ -41,17 +42,7 @@ const MyAppContent = ({ Component, pageProps }: AppProps) => {
 				pb={5}
 				pt={5}
 				zIndex={2}>
-				<Flex
-					width="90%"
-					alignItems="center"
-					justifyContent="space-between"
-					maxWidth={500}
-					margin="0 auto">
-					<Heading mr="10" alignItems="center">
-						Habits Tracker
-					</Heading>
-					<ColorModeButton />
-				</Flex>
+				<NavBar />
 			</Box>
 			<Box height="150px"></Box>
 			<Component {...pageProps} />
