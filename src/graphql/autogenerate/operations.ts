@@ -5,6 +5,7 @@ export type InsertHabitMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];
   habitType: Types.Habit_Type_Enum;
   time?: Types.InputMaybe<Types.Scalars['timetz']>;
+  date?: Types.InputMaybe<Types.Scalars['date']>;
 }>;
 
 

@@ -25,7 +25,6 @@ const MyHabits = () => {
 	const [date, setDate] = useState(new Date())
 	const [newHabitName, setNewHabitName] = useState('')
 	const [newHabitType, setNewHabitType] = useState(Habit_Type_Enum.Neutral)
-
 	const { insertHabit, deleteHabit, habitsLoading, habits } = useHabits({ user, date })
 
 	const addIconHandler = () => {

@@ -9,14 +9,7 @@ export const getTimeFromTimestamp = (time: string) => {
 	return `${hour}:${minute} ${AMPM}`
 }
 
-export const currentDate = () => {
-	const date = new Date()
-	const month = date.getMonth() + 1
-	const day = date.getDate()
-	const year = date.getFullYear()
-
-	return `${month}-${day}-${year}`
-}
+export const currentDate = () => new Date().toISOString().split('T')[0]
 
 export const getCurrentTime = () => {
 	const date = new Date()

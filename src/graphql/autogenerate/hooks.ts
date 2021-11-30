@@ -5,9 +5,9 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 
 export const InsertHabitDocument = gql`
-    mutation InsertHabit($userId: Int!, $name: String!, $habitType: habit_type_enum!, $time: timetz) {
+    mutation InsertHabit($userId: Int!, $name: String!, $habitType: habit_type_enum!, $time: timetz, $date: date) {
   insert_habit_one(
-    object: {user_id: $userId, name: $name, habit_type: $habitType, time_created: $time}
+    object: {user_id: $userId, name: $name, habit_type: $habitType, time_created: $time, created_at: $date}
   ) {
     habit_id
     name
@@ -37,6 +37,7 @@ export type InsertHabitMutationFn = Apollo.MutationFunction<Types.InsertHabitMut
  *      name: // value for 'name'
  *      habitType: // value for 'habitType'
  *      time: // value for 'time'
+ *      date: // value for 'date'
  *   },
  * });
  */

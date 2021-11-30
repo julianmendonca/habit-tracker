@@ -24,7 +24,7 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 	} = useGetHabitsByUserIdAndDateQuery({
 		variables: {
 			userId: user?.id || 0,
-			date: date.toISOString(),
+			date: date.toISOString().split('T')[0],
 			offset: 0
 		},
 		fetchPolicy: 'no-cache'
@@ -37,7 +37,7 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 				user_id: user.id,
 				habit_type: habitType,
 				habit_id: habitIdMock--,
-				created_at: currentDate(),
+				created_at: date.toISOString().split('T')[0],
 				time_created: getCurrentTimez()
 			}
 			setHabits((prev) => [...prev, mockHabit])
@@ -46,7 +46,8 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 					name: newHabit.toLowerCase(),
 					userId: user.id,
 					habitType: habitType,
-					time: getCurrentTimez()
+					time: getCurrentTimez(),
+					date: date.toISOString().split('T')[0]
 				},
 				update: async () => {
 					if (refetch) refetch()
