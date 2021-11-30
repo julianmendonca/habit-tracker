@@ -26,6 +26,7 @@ const Home: NextPage = () => {
 						onFailure={() => alert('error')}
 						cookiePolicy={'single_host_origin'}
 						style={{ borderRadius: 35 }}
+						isSignedIn
 					/>
 				) : (
 					<Spinner size="xl" />

@@ -13,7 +13,7 @@ type UseHabitsProps = {
 	user: Users | null
 	date: Date
 }
-let habitIdMock = 0
+let habitIdMock = -1
 
 export const useHabits = ({ user, date }: UseHabitsProps) => {
 	const [habits, setHabits] = useState<Habit[]>([])
@@ -71,6 +71,23 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 		deleteHabitMutation({
 			variables: {
 				habitId
+			},
+			optimisticResponse: {
+				delete_habit_by_pk: {
+					habit_id: habitId
+				}
+			},
+			update: async (cache, { data }) => {
+				const existingHabits = client.readQuery({
+					query: GetHabitsByUserIdAndDateDocument,
+					variables: getHabitsVariables
+				})
+				const newHabits = existingHabits.habit.filter((i: Habit) => i.habit_id !== habitId)
+				cache.writeQuery({
+					query: GetHabitsByUserIdAndDateDocument,
+					variables: getHabitsVariables,
+					data: { habit: newHabits }
+				})
 			}
 		})
 	}

@@ -27,33 +27,6 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
 	link: authLink.concat(httpLink),
 	cache: new InMemoryCache()
-	// 	{
-	// 	typePolicies: {
-	// 		Query: {
-	// 			fields: {}
-	// 		}
-	// 	},
-	// 	dataIdFromObject(responseObject: StoreObject) {
-	// 		const table = responseObject.__typename as string
-	// 		const defaultPk = defaultDataIdFromObject(responseObject)
-	// 		if (!table || table.includes('aggregate')) return defaultPk
-
-	// 		let finalPkName = ''
-	// 		let finalPkVal = ''
-	// 		finalPkName = `${table}_id`
-	// 		if (!(finalPkName in responseObject)) {
-	// 			if (!finalPkName.includes('s_id')) return defaultPk
-
-	// 			finalPkName = finalPkName.replace('s_id', '_id')
-	// 			if (!(finalPkName in responseObject)) return defaultPk
-	// 		}
-	// 		finalPkVal = responseObject[finalPkName] as string
-	// 		finalPkVal = `${table}:${finalPkVal}`
-
-	// 		// console.log({ [table]: finalPkVal })
-	// 		return finalPkVal
-	// 	}
-	// }
 })
 
 export default client
