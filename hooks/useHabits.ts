@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import client from '../apollo-client'
 import {
+	GetHabitsByUserIdAndDateDocument,
 	useDeleteHabitByPkMutation,
 	useGetHabitsByUserIdAndDateQuery,
 	useInsertHabitMutation
@@ -17,40 +19,58 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 	const [habits, setHabits] = useState<Habit[]>([])
 
 	const [insertHabitMutation] = useInsertHabitMutation()
-	const {
-		data: habitsData,
-		loading: habitsLoading,
-		refetch
-	} = useGetHabitsByUserIdAndDateQuery({
+	const { data: habitsData, loading: habitsLoading } = useGetHabitsByUserIdAndDateQuery({
 		variables: {
 			userId: user?.id || 0,
 			date: date.toISOString().split('T')[0],
 			offset: 0
-		},
-		fetchPolicy: 'no-cache'
+		}
 	})
 	const [deleteHabitMutation] = useDeleteHabitByPkMutation()
 	const insertHabit = (newHabit: string, habitType: Habit_Type_Enum = Habit_Type_Enum.Neutral) => {
 		if (user?.id) {
-			const mockHabit: Habit = {
-				name: newHabit.toLowerCase(),
-				user_id: user.id,
-				habit_type: habitType,
-				habit_id: habitIdMock--,
-				created_at: date.toISOString().split('T')[0],
-				time_created: getCurrentTimez()
-			}
-			setHabits((prev) => [...prev, mockHabit])
+			const insertDate = date.toISOString().split('T')[0]
 			insertHabitMutation({
 				variables: {
 					name: newHabit.toLowerCase(),
 					userId: user.id,
 					habitType: habitType,
 					time: getCurrentTimez(),
-					date: date.toISOString().split('T')[0]
+					date: insertDate
 				},
-				update: async () => {
-					if (refetch) refetch()
+				optimisticResponse: {
+					insert_habit_one: {
+						name: newHabit.toLowerCase(),
+						user_id: user.id,
+						habit_type: habitType,
+						habit_id: habitIdMock--,
+						created_at: insertDate,
+						time_created: getCurrentTimez()
+					}
+				},
+				update: async (cache, { data }) => {
+					const existingHabits = client.readQuery({
+						// The cached query key is the same as the name of the GQL schema
+						query: GetHabitsByUserIdAndDateDocument,
+						variables: {
+							userId: user?.id || 0,
+							date: insertDate,
+							offset: 0
+						}
+					})
+					// Now we combine the optimisticResponse we passed in earlier and the existing data
+					const newHabits = [...existingHabits.habit, data?.insert_habit_one]
+					console.log({ existingHabits, habits, newHabits })
+					// Finally we overwrite the cache
+					cache.writeQuery({
+						query: GetHabitsByUserIdAndDateDocument,
+						variables: {
+							userId: user?.id || 0,
+							date: date.toISOString().split('T')[0],
+							offset: 0
+						},
+						data: { habit: newHabits }
+					})
 				}
 			})
 		}

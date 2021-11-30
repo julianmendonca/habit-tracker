@@ -59,7 +59,7 @@ const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
 				<Text textTransform="capitalize">{habit.name}</Text>
 				<HStack>
 					<Text mr={5} textTransform="uppercase">
-						{getTimeFromTimestamp(habit.time_created)}
+						{getTimeFromTimestamp(habit.time_created || '')}
 					</Text>
 					<TypeIcon />
 				</HStack>
