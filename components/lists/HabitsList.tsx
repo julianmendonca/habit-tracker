@@ -4,7 +4,7 @@ import { Habit, Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
 type HabitsListProps = FlexProps & {
 	habits: Habit[]
 	onDelete: (habitId: number) => void
-	onSave: { habitId: number; habitName: string; habitType: Habit_Type_Enum }
+	onSave: (habitId: number, habitName: string, habitType: Habit_Type_Enum) => void
 }
 const HabitsList = ({ habits, onDelete, onSave, ...props }: HabitsListProps) => {
 	return (

@@ -10,7 +10,7 @@ import { EditHabitDialog } from '../dialogs/EditHabitDialog'
 type HabitCardProps = {
 	habit: Habit
 	onDelete: (habitId: number) => void
-	onSave: ({}: { habitId: number; habitName: string; habitType: Habit_Type_Enum }) => void
+	onSave: (habitId: number, habitName: string, habitType: Habit_Type_Enum) => void
 }
 
 const HabitCard = ({ habit, onDelete, onSave }: HabitCardProps) => {
@@ -22,8 +22,8 @@ const HabitCard = ({ habit, onDelete, onSave }: HabitCardProps) => {
 		onDelete(habit.habit_id)
 		closeDeleteDialog()
 	}
-	const handleSave = (habit: { habitId: number; habitName: string; habitType: Habit_Type_Enum }) => {
-		onSave(habit)
+	const handleSave = (habitId: number, habitName: string, habitType: Habit_Type_Enum) => {
+		onSave(habitId, habitName, habitType)
 		closeDeleteDialog()
 	}
 

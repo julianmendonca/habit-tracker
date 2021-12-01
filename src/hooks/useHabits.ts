@@ -106,15 +106,7 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 		})
 	}
 
-	const updateHabit = ({
-		habitId,
-		habitName,
-		habitType
-	}: {
-		habitId: number
-		habitType: Habit_Type_Enum
-		habitName: string
-	}) => {
+	const updateHabit = (habitId: number, habitName: string, habitType: Habit_Type_Enum) => {
 		updateHabitMutation({
 			variables: {
 				habitId,

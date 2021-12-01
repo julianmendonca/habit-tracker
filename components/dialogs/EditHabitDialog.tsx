@@ -18,13 +18,13 @@ import { DeleteIcon } from '@chakra-ui/icons'
 
 type EditHabitDialogProps = AlertDialogProps & {
 	habit: Habit
-	onSave: ({}: { habitId: number; habitName: string; habitType: Habit_Type_Enum }) => void
+	onSave: (habitId: number, habitName: string, habitType: Habit_Type_Enum) => void
 	onDelete: (habitId: number) => void
 }
 export const EditHabitDialog = ({ habit, onSave, onDelete, ...props }: EditHabitDialogProps) => {
 	const [habitName, setHabitName] = useState(habit.name)
 	const [habitType, setHabitType] = useState(habit.habit_type || Habit_Type_Enum.Neutral)
-	const saveHabit = () => onSave({ habitId: habit.habit_id, habitName, habitType })
+	const saveHabit = () => onSave(habit.habit_id, habitName, habitType)
 
 	return (
 		<AlertDialog {...props}>
