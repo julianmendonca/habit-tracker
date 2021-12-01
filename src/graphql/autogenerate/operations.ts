@@ -18,6 +18,15 @@ export type DeleteHabitByPkMutationVariables = Types.Exact<{
 
 export type DeleteHabitByPkMutation = { __typename?: 'mutation_root', delete_habit_by_pk?: { __typename?: 'habit', habit_id: number } | null | undefined };
 
+export type UpdateHabitByPkMutationVariables = Types.Exact<{
+  habitId: Types.Scalars['Int'];
+  habitName: Types.Scalars['String'];
+  habitType: Types.Habit_Type_Enum;
+}>;
+
+
+export type UpdateHabitByPkMutation = { __typename?: 'mutation_root', update_habit_by_pk?: { __typename?: 'habit', name: string, habit_id: number, habit_type?: Types.Habit_Type_Enum | null | undefined } | null | undefined };
+
 export type GetHabitsByUserIdAndDateQueryVariables = Types.Exact<{
   userId: Types.Scalars['Int'];
   date: Types.Scalars['date'];

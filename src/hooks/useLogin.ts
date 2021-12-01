@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { GoogleLoginResponse } from 'react-google-login'
-import { useAuthContext } from '../src/context/authContext'
-import { useGetUserByGoogleIdLazyQuery, useInsertUserMutation } from '../src/graphql/autogenerate/hooks'
-import { Users } from '../src/graphql/autogenerate/schemas'
+import { useAuthContext } from '../context/authContext'
+import { useGetUserByGoogleIdLazyQuery, useInsertUserMutation } from '../graphql/autogenerate/hooks'
+import { Users } from '../graphql/autogenerate/schemas'
 
 export const useLogin = () => {
 	const router = useRouter()

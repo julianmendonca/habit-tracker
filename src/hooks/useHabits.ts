@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
-import client from '../apollo-client'
+import client from '../../apollo-client'
 import {
 	GetHabitsByUserIdAndDateDocument,
 	useDeleteHabitByPkMutation,
 	useGetHabitsByUserIdAndDateQuery,
-	useInsertHabitMutation
-} from '../src/graphql/autogenerate/hooks'
-import { Habit, Habit_Type_Enum, Users } from '../src/graphql/autogenerate/schemas'
-import { currentDate, getCurrentTimez } from '../src/utils/timeFormat'
+	useInsertHabitMutation,
+	useUpdateHabitByPkMutation
+} from '../graphql/autogenerate/hooks'
+import { Habit, Habit_Type_Enum, Users } from '../graphql/autogenerate/schemas'
+import { currentDate, getCurrentTimez } from '../utils/timeFormat'
 
 type UseHabitsProps = {
 	user: Users | null
@@ -20,6 +21,7 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 
 	const [insertHabitMutation] = useInsertHabitMutation()
 	const [deleteHabitMutation] = useDeleteHabitByPkMutation()
+	const [updateHabitMutation] = useUpdateHabitByPkMutation()
 
 	const getHabitsVariables = {
 		userId: user?.id || 0,
@@ -32,19 +34,31 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 	const insertHabit = (newHabit: string, habitType: Habit_Type_Enum = Habit_Type_Enum.Neutral) => {
 		if (user?.id) {
 			const insertDate = date.toISOString().split('T')[0]
+			let habitName = newHabit.toLowerCase()
+			let newHabitType = habitType
+			if (newHabit.includes('-b')) {
+				habitName = newHabit.replace('-b', '').trim()
+				newHabitType = Habit_Type_Enum.Bad
+			} else if (newHabit.includes('-g')) {
+				habitName = newHabit.replace('-g', '').trim()
+				newHabitType = Habit_Type_Enum.Good
+			} else if (newHabit.includes('-n')) {
+				habitName = newHabit.replace('-n', '').trim()
+				newHabitType = Habit_Type_Enum.Neutral
+			}
 			insertHabitMutation({
 				variables: {
-					name: newHabit.toLowerCase(),
+					name: habitName.toLowerCase(),
 					userId: user.id,
-					habitType: habitType,
+					habitType: newHabitType,
 					time: getCurrentTimez(),
 					date: insertDate
 				},
 				optimisticResponse: {
 					insert_habit_one: {
-						name: newHabit.toLowerCase(),
+						name: habitName.toLowerCase(),
 						user_id: user.id,
-						habit_type: habitType,
+						habit_type: newHabitType,
 						habit_id: habitIdMock--,
 						created_at: insertDate,
 						time_created: getCurrentTimez()
@@ -92,6 +106,52 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 		})
 	}
 
+	const updateHabit = ({
+		habitId,
+		habitName,
+		habitType
+	}: {
+		habitId: number
+		habitType: Habit_Type_Enum
+		habitName: string
+	}) => {
+		updateHabitMutation({
+			variables: {
+				habitId,
+				habitType,
+				habitName
+			},
+			optimisticResponse: {
+				update_habit_by_pk: {
+					habit_id: habitId,
+					name: habitName,
+					habit_type: habitType
+				}
+			},
+			update: async (cache, { data }) => {
+				const existingHabits = client.readQuery({
+					query: GetHabitsByUserIdAndDateDocument,
+					variables: getHabitsVariables
+				})
+				const newHabits = existingHabits.habit.map((i: Habit) => {
+					if (i.habit_id === habitId) {
+						return {
+							...i,
+							name: habitName,
+							habit_type: habitType
+						}
+					}
+					return i
+				})
+				cache.writeQuery({
+					query: GetHabitsByUserIdAndDateDocument,
+					variables: getHabitsVariables,
+					data: { habit: newHabits }
+				})
+			}
+		})
+	}
+
 	useEffect(() => {
 		setHabits(habitsData?.habit || [])
 	}, [habitsData])
@@ -100,6 +160,7 @@ export const useHabits = ({ user, date }: UseHabitsProps) => {
 		insertHabit,
 		deleteHabit,
 		habitsLoading,
-		habits
+		habits,
+		updateHabit
 	}
 }

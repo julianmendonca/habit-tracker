@@ -81,6 +81,46 @@ export function useDeleteHabitByPkMutation(baseOptions?: Apollo.MutationHookOpti
 export type DeleteHabitByPkMutationHookResult = ReturnType<typeof useDeleteHabitByPkMutation>;
 export type DeleteHabitByPkMutationResult = Apollo.MutationResult<Types.DeleteHabitByPkMutation>;
 export type DeleteHabitByPkMutationOptions = Apollo.BaseMutationOptions<Types.DeleteHabitByPkMutation, Types.DeleteHabitByPkMutationVariables>;
+export const UpdateHabitByPkDocument = gql`
+    mutation UpdateHabitByPk($habitId: Int!, $habitName: String!, $habitType: habit_type_enum!) {
+  update_habit_by_pk(
+    pk_columns: {habit_id: $habitId}
+    _set: {habit_type: $habitType, name: $habitName}
+  ) {
+    name
+    habit_id
+    habit_type
+  }
+}
+    `;
+export type UpdateHabitByPkMutationFn = Apollo.MutationFunction<Types.UpdateHabitByPkMutation, Types.UpdateHabitByPkMutationVariables>;
+
+/**
+ * __useUpdateHabitByPkMutation__
+ *
+ * To run a mutation, you first call `useUpdateHabitByPkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHabitByPkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHabitByPkMutation, { data, loading, error }] = useUpdateHabitByPkMutation({
+ *   variables: {
+ *      habitId: // value for 'habitId'
+ *      habitName: // value for 'habitName'
+ *      habitType: // value for 'habitType'
+ *   },
+ * });
+ */
+export function useUpdateHabitByPkMutation(baseOptions?: Apollo.MutationHookOptions<Types.UpdateHabitByPkMutation, Types.UpdateHabitByPkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.UpdateHabitByPkMutation, Types.UpdateHabitByPkMutationVariables>(UpdateHabitByPkDocument, options);
+      }
+export type UpdateHabitByPkMutationHookResult = ReturnType<typeof useUpdateHabitByPkMutation>;
+export type UpdateHabitByPkMutationResult = Apollo.MutationResult<Types.UpdateHabitByPkMutation>;
+export type UpdateHabitByPkMutationOptions = Apollo.BaseMutationOptions<Types.UpdateHabitByPkMutation, Types.UpdateHabitByPkMutationVariables>;
 export const GetHabitsByUserIdAndDateDocument = gql`
     query GetHabitsByUserIdAndDate($userId: Int!, $date: date!, $offset: Int) {
   habit(

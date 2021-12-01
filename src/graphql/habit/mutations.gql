@@ -16,3 +16,11 @@ mutation DeleteHabitByPK($habitId: Int!) {
 		habit_id
 	}
 }
+
+mutation UpdateHabitByPk($habitId: Int!, $habitName: String!, $habitType: habit_type_enum!) {
+	update_habit_by_pk(pk_columns: { habit_id: $habitId }, _set: { habit_type: $habitType, name: $habitName }) {
+		name
+		habit_id
+		habit_type
+	}
+}

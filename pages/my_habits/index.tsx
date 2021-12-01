@@ -8,16 +8,9 @@ import { Input, Spinner } from '@chakra-ui/react'
 import DateSelector from '../../components/DateSelector'
 import HabitsList from '../../components/lists/HabitsList'
 import { Text } from '@chakra-ui/react'
-import {
-	useDeleteHabitByPkMutation,
-	useGetHabitsByUserIdAndDateQuery,
-	useInsertHabitMutation
-} from '../../src/graphql/autogenerate/hooks'
-import { Habit, Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
+import { Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
 import { useAuthContext } from '../../src/context/authContext'
-import { useEffect } from 'react'
-import { currentDate, getCurrentTime, getCurrentTimez } from '../../src/utils/timeFormat'
-import { useHabits } from '../../hooks/useHabits'
+import { useHabits } from '../../src/hooks/useHabits'
 import { HabitTypeSelect } from '../../components/selects/HabitTypeSelect'
 
 const MyHabits = () => {
@@ -25,7 +18,7 @@ const MyHabits = () => {
 	const [date, setDate] = useState(new Date())
 	const [newHabitName, setNewHabitName] = useState('')
 	const [newHabitType, setNewHabitType] = useState(Habit_Type_Enum.Neutral)
-	const { insertHabit, deleteHabit, habitsLoading, habits } = useHabits({ user, date })
+	const { insertHabit, deleteHabit, updateHabit, habitsLoading, habits } = useHabits({ user, date })
 
 	const addIconHandler = () => {
 		setNewHabitName('')
@@ -47,12 +40,12 @@ const MyHabits = () => {
 			</Flex>
 			<Flex direction="column" alignItems="center">
 				{habitsLoading && <Spinner size="xl" />}
-				{!!habits?.length && <HabitsList habits={habits} onDelete={deleteHabit} />}
+				{!!habits?.length && <HabitsList habits={habits} onDelete={deleteHabit} onSave={updateHabit} />}
 				{!habits?.length && !habitsLoading && <Text>No habits found...</Text>}
 				<Grid width="100%" column={12} gap={4} mt={4} mb={4}>
 					<GridItem colSpan={12}>
 						<Input
-							placeholder="Basic usage"
+							placeholder="Add a habit..."
 							value={newHabitName}
 							onChange={(e) => setNewHabitName(e.target.value)}
 							size="lg"

@@ -28,7 +28,7 @@ export const MobileNav = () => {
 	return (
 		<Flex width="90%" alignItems="center" justifyContent="space-between" maxWidth={900} margin="0 auto">
 			<Flex alignItems="center">
-				<EditIcon siz mr={5} w={10} height={10} />
+				<EditIcon mr={5} w={10} height={10} />
 				<Heading fontSize={[20, 40]} mr={10}>
 					Habits Tracker
 				</Heading>

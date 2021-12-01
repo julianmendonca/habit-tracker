@@ -1,32 +1,29 @@
-import { Box, Flex, HStack, Text } from '@chakra-ui/layout'
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogOverlay,
-	Button,
-	Tooltip
-} from '@chakra-ui/react'
+import { Flex, HStack, Text } from '@chakra-ui/layout'
+import { Tooltip } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Habit, Habit_Type_Enum } from '../../src/graphql/autogenerate/schemas'
 import { getTimeFromTimestamp } from '../../src/utils/timeFormat'
 import EmptyCard from './EmptyCard'
 import { CheckCircleIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons'
+import { EditHabitDialog } from '../dialogs/EditHabitDialog'
 
 type HabitCardProps = {
 	habit: Habit
 	onDelete: (habitId: number) => void
+	onSave: ({}: { habitId: number; habitName: string; habitType: Habit_Type_Enum }) => void
 }
 
-const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
+const HabitCard = ({ habit, onDelete, onSave }: HabitCardProps) => {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 	const openDeleteDialog = () => setDeleteDialogOpen(true)
 	const closeDeleteDialog = () => setDeleteDialogOpen(false)
 	const cancelRef = React.useRef(null)
 	const handleDelete = () => {
 		onDelete(habit.habit_id)
+		closeDeleteDialog()
+	}
+	const handleSave = (habit: { habitId: number; habitName: string; habitType: Habit_Type_Enum }) => {
+		onSave(habit)
 		closeDeleteDialog()
 	}
 
@@ -64,7 +61,16 @@ const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
 					<TypeIcon />
 				</HStack>
 			</Flex>
-			<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelRef} onClose={closeDeleteDialog}>
+			<EditHabitDialog
+				isOpen={deleteDialogOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={closeDeleteDialog}
+				habit={habit}
+				onSave={handleSave}
+				onDelete={handleDelete}>
+				{}
+			</EditHabitDialog>
+			{/* <AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelRef} onClose={closeDeleteDialog}>
 				<AlertDialogOverlay>
 					<AlertDialogContent ml={5} mr={5}>
 						<AlertDialogHeader fontSize="lg" fontWeight="bold">
@@ -81,7 +87,7 @@ const HabitCard = ({ habit, onDelete }: HabitCardProps) => {
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialogOverlay>
-			</AlertDialog>
+			</AlertDialog> */}
 		</EmptyCard>
 	)
 }
