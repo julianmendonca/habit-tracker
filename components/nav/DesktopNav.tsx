@@ -4,6 +4,7 @@ import React from 'react'
 import { GoogleLogout } from 'react-google-login'
 import ColorModeButton from '../buttons/ColorModeButton'
 import { useRouter } from 'next/router'
+import { EditIcon } from '@chakra-ui/icons'
 
 export const DesktopNav = () => {
 	const router = useRouter()
@@ -19,8 +20,8 @@ export const DesktopNav = () => {
 
 	return (
 		<Flex width="90%" alignItems="center" justifyContent="space-between" maxWidth={900} margin="0 auto">
-			<Heading fontSize={[20, 40]} mr="10" alignItems="center">
-				Habits Tracker
+			<Heading fontSize={[20, 40]} display="flex" mr="10" alignItems="center">
+				<EditIcon mr={5} /> Habits Tracker
 			</Heading>
 			<HStack>
 				<Button onClick={goToHabits}>My Habits</Button>

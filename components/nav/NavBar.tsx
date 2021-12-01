@@ -1,10 +1,10 @@
 import React from 'react'
 import { DesktopNav } from './DesktopNav'
-import { useMediaQuery } from '@chakra-ui/react'
+import { useBreakpointValue, useMediaQuery } from '@chakra-ui/react'
 import { MobileNav } from './MobileNav'
 
 export const NavBar = () => {
-	const [isDesktop] = useMediaQuery('(min-width: 600px)')
+	const isMinWidthLg = useBreakpointValue({ lg: true })
 
-	return isDesktop ? <DesktopNav /> : <MobileNav />
+	return isMinWidthLg ? <DesktopNav /> : <MobileNav />
 }

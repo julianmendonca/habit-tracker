@@ -5,7 +5,7 @@ import { GoogleLogout, useGoogleLogout } from 'react-google-login'
 import ColorModeButton from '../buttons/ColorModeButton'
 import { useRouter } from 'next/router'
 import { IconButton, Menu, MenuButton, MenuItem, MenuList, useColorMode } from '@chakra-ui/react'
-import { ChevronDownIcon, CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, CloseIcon, EditIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 export const MobileNav = () => {
 	const router = useRouter()
@@ -27,9 +27,12 @@ export const MobileNav = () => {
 
 	return (
 		<Flex width="90%" alignItems="center" justifyContent="space-between" maxWidth={900} margin="0 auto">
-			<Heading fontSize={[20, 40]} mr="10" alignItems="center">
-				Habits Trackerr
-			</Heading>
+			<Flex alignItems="center">
+				<EditIcon siz mr={5} w={10} height={10} />
+				<Heading fontSize={[20, 40]} mr={10}>
+					Habits Tracker
+				</Heading>
+			</Flex>
 			<Menu>
 				<MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} />
 				<MenuList>
